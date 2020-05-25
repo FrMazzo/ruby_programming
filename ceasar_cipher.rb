@@ -38,7 +38,7 @@ string = gets.chomp
 shift = ""
 #Until shift only contains numbers
 until shift.match(/^\-?[0-9]+$/)
-    print "Enter letter shift: (integer)\n"
+    print "Enter shift factor: "
     shift = gets.chomp
 end
 #Turns shift to integer
