@@ -6,15 +6,15 @@ class Game
   end
 
   def start
-    border = [":::::::::::::::::::"]
-    puts [border, ": TIC - TAC - TOE :", border, "\n", "-h for help", "\n"]
+    border = ["  :::::::::::::::::::"]
+    puts [border, "  : TIC - TAC - TOE :", border, "\n", "-h for help", "\n"]
   end
 
   def help
     border = "." * 16
     instructions = ["  Instructions", " _ _ _    _ _ _", "|_|_|_|  |7|8|9|","|_|_|_|=>|4|5|6|","|_|_|_|  |1|2|3|"]
     commands = ["\n","-h for help", "-n to start a new game", "-e to exit program"]
-    puts [border, instructions, commands, border]
+    puts [border, border, instructions, commands, border, border]
   end
 
 end
@@ -54,7 +54,7 @@ class Round
       @squares[2 - (n/3).floor][n%3] = char
       @turn_a = !@turn_a
     else
-      puts "That square is already filled!"
+      puts "\n\nThat square is already filled!"
     end
   end
 
@@ -77,11 +77,20 @@ class Round
       diagonals[1] += @squares[2-i][i]
     end
 
-    #Loop over every direction
-    #TODO
-      #Updates winner and return true
-      #TODO
-
+    lines = (rows << columns << diagonals).flatten
+    #Loop over every direction, updates winner if found and returns true
+    lines.each do |l|
+      case l
+      when "xxx"
+        puts "\n\nPlayer A wins!"
+        @winner = 0
+        return true
+      when "ooo"
+        puts "\n\nPlayer B wins!"
+        @winner = 1
+        return true
+      end
+    end
 
     #Checks for a full board
     unless @squares.flatten.join('').include? "_"
@@ -109,6 +118,7 @@ loop do
   case input
   when /^[1-9]$/
     round.turn(input.to_i)
+
     if round.end?
       game.scores[round.winner] += 1 if round.winner != nil
       round.display(game)
