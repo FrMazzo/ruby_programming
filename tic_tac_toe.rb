@@ -3,11 +3,11 @@ class Game
 
   def initialize
     @scores = [0, 0]
-    puts "game init"
   end
 
   def start
-    puts "Main"
+    border = [":::::::::::::::::::"]
+    puts [border, ": TIC - TAC - TOE :", border, "\n", "-h for help", "\n"]
   end
 
   def help
@@ -53,7 +53,7 @@ class Round
     @turn_a = !@turn_a
   end
 
-  def end?(game)
+  def end?
     #Creates a string for each row
     rows = @squares.map { |r| r.join('')}
 
@@ -73,9 +73,12 @@ class Round
       diagonals[1] += @squares[2-i][i]
       p @squares[2-i][i]
     end
-  
-    puts "round end?"
-    p rows + columns + diagonals
+
+    unless @squares.flatten.join('').include? "_"
+      return true
+    else
+      return false
+    end
   end
 end
 
@@ -86,18 +89,26 @@ game = Game.new
 round = Round.new
 
 game.start
+round.display(game)
 
-
-input = gets.chomp
 
 loop do
-
+  
+  input = gets.chomp
   
   case input
   when /^[1-9]$/
     round.turn(input.to_i)
-    round.end?(game)
-    round.display(game)
+    if round.end?
+      game.scores[round.winner] += 1 if round.winner != nil
+      round.display(game)
+      print "Press enter to continue "
+      gets
+      round = Round.new
+      round.display(game)
+    else
+      round.display(game)
+    end
   when 'h'
     game.help
     print "Press enter to continue "
@@ -113,5 +124,4 @@ loop do
     puts "h for help"
   end
 
-  input = gets.chomp
 end
