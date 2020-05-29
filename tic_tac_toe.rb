@@ -3,6 +3,7 @@ class Game
 
   def initialize
     @scores = [0, 0]
+    @last_looser = true
   end
 
   def start
@@ -24,9 +25,9 @@ end
 class Round
   attr_accessor :squares, :turn_a, :winner
 
-  def initialize
+  def initialize(looser = true)
     @squares = [['_','_','_'],['_','_','_'],['_','_','_']]
-    @turn_a = true
+    @turn_a = looser
     @winner = nil
   end
 
@@ -43,7 +44,13 @@ class Round
     rows = squares.map { |r| "#{pad}|#{r.join('|')}|"}
     rows.unshift("#{pad} _ _ _\n")
 
+    ab = turn_a ? "A" : "B"
+    xo = turn_a ? "x" : "o"
+    to_play = "Player #{ab}'s turn: (#{xo})"
+
     puts [border, scores, rows, "\n"]
+
+    puts to_play unless @winner
   end
 
   def turn(n)
@@ -124,7 +131,7 @@ loop do
       round.display(game)
       print "Press enter to continue "
       gets
-      round = Round.new
+      round = Round.new(round.winner == 1)
       round.display(game)
     else
       round.display(game)
