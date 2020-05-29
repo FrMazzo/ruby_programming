@@ -49,8 +49,13 @@ class Round
   def turn(n)
     char = @turn_a ? "x" : "o"
     n -= 1
-    @squares[2 - (n/3).floor][n%3] = char
-    @turn_a = !@turn_a
+    if @squares[2 - (n/3).floor][n%3] == "_"
+
+      @squares[2 - (n/3).floor][n%3] = char
+      @turn_a = !@turn_a
+    else
+      puts "That square is already filled!"
+    end
   end
 
   def end?
@@ -69,11 +74,16 @@ class Round
     diagonals = ["",""]
     0.upto(2) do |i|
       diagonals[0] += @squares[i][i]
-      p @squares[i][i]
       diagonals[1] += @squares[2-i][i]
-      p @squares[2-i][i]
     end
 
+    #Loop over every direction
+    #TODO
+      #Updates winner and return true
+      #TODO
+
+
+    #Checks for a full board
     unless @squares.flatten.join('').include? "_"
       return true
     else
