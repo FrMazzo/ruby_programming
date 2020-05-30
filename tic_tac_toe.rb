@@ -108,8 +108,7 @@ class Round
   end
 end
 
-
-
+#
 
 game = Game.new
 round = Round.new
@@ -136,17 +135,21 @@ loop do
     else
       round.display(game)
     end
+
   when 'h'
     game.help
     print "Press enter to continue "
     gets
     round.display(game)
+
   when 'n'
     game = Game.new
     round = Round.new
     round.display(game)
+
   when 'e'
     break
+    
   else
     puts "h for help"
   end
