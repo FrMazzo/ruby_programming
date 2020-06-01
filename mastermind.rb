@@ -12,9 +12,9 @@ class Round
 
   def check_guess(input)
 
-    guess = input.split(' ').map { |i| COLORS.index(i)}
+    guess = input.is_a?(String) ? input.split(' ').map { |i| COLORS.index(i)} : input
 
-    if guess.length != 4 || guess.include?(nil)
+    if guess.length != @code.length || guess.include?(nil)
       puts "Invalid input"
       return
     end
@@ -56,13 +56,13 @@ end
 class Player
   attr_accessor :codemaker
 
-  def initialize(codemaker)
-    @codemaker = codemaker
+  def initialize
+    @codemaker = false
   end
 
   def make_code
 
-    code = nil
+    code = []
 
     while code.length != 4 || code.include?(nil)
 
@@ -81,8 +81,8 @@ end
 class Computer
   attr_accessor :codemaker
 
-  def initialize(codemaker)
-    @codemaker = codemaker
+  def initialize
+    @codemaker = false
   end
 
   def make_code
@@ -95,8 +95,8 @@ class Computer
   def guess
     #TODO, it has to store every guess done and use logic to proceed
     guess = []
-    4.times { guess.push(rand(0..5))}
-    guess.map! { |i| COLORS[i]}
+    4.times { guess.push(rand(0..COLORS.length))}
+    puts guess.map { |i| COLORS[i]}.join(' ')
     guess
   end
 end
@@ -105,17 +105,18 @@ end
 loop do
 
   round = Round.new
+  player = Player.new
+  computer = Computer.new
 
   puts ["Enter cm to play as codemaker or cb to play as codebraker", "Enter h for help", "Enter e to exit"]
+  
   input = gets.chomp
 
   case input
   when "cm"
-    player = Player.new(true)
-    computer = Computer.new(false)
+    player.codemaker = true
   when "cb"
-    player = Player.new(false)
-    computer = Computer.new(true)}
+    computer.codemaker = true
   when "h"
     round.instructions
   when "e"
