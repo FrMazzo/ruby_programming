@@ -48,6 +48,9 @@ class Round
     @code.each { |i| @code_colors[i] += 1}
   end
 
+  def instructions
+    puts "TODO"
+  end
 end
 
 class Player
@@ -102,8 +105,24 @@ end
 loop do
 
   round = Round.new
-  player = Player.new(false)
-  computer = Computer.new(true)
+
+  puts ["Enter cm to play as codemaker or cb to play as codebraker", "Enter h for help", "Enter e to exit"]
+  input = gets.chomp
+
+  case input
+  when "cm"
+    player = Player.new(true)
+    computer = Computer.new(false)
+  when "cb"
+    player = Player.new(false)
+    computer = Computer.new(true)}
+  when "h"
+    round.instructions
+  when "e"
+    break
+  else
+    next
+  end
 
   round.code = player.codemaker ? player.make_code : computer.make_code
 
@@ -113,6 +132,13 @@ loop do
       puts "Guess #{round.guesses}: "
 
       input = gets.chomp
+
+      case input
+      when "h"
+        round.instructions
+      when "n"
+        break
+      end
 
       player.codemaker ? round.check_guess(computer.guess) : round.check_guess(input)
 
