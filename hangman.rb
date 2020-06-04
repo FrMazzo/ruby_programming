@@ -1,19 +1,68 @@
-def draw_hangman(n)
+class Game
+  attr_accessor :word, :misses, :guessed_chars
 
-  hangman = ["      _____", "     |     |", "     |", "     |", "   __|__", " _|_____|_", "|____#{n}____|"]
+  def initialize(word, misses = 0, guessed_chars = [])
+    @word = word 
+    @misses = misses 
+    @guessed_chars = guessed_chars  
+  end
 
-  hangman[2] = "     |     o" if n > 0
-  hangman[3] = "     |     |" if n > 1
-  hangman[3] = "     |    /|" if n > 2
-  hangman[3] = "     |    /|\\" if n > 3
-  hangman[4] = "   __|__  /" if n > 4
-  hangman[4] = "   __|__  / \\" if n > 5
 
-  hangman
+  def draw_hangman
+
+    hangman = ["      _____", "     |     |", "     |", "     |", "   __|__", " _|_____|_", "|____#{@misses}____|"]
+  
+    hangman[2] = "     |     o" if @misses > 0
+    hangman[3] = "     |     |" if @misses > 1
+    hangman[3] = "     |    /|" if @misses > 2
+    hangman[3] = "     |    /|\\" if @misses > 3
+    hangman[4] = "   __|__  /" if @misses > 4
+    hangman[4] = "   __|__  / \\" if @misses > 5
+  
+    hangman
+  end
+
+  def guess(char)
+    @word.include?(char) ? @guessed_chars.push(char) : @misses += 1
+  end
+
+  def display_word
+    @word.split('')
+         .map { |c| @guessed_chars.include?(c) ? c : '-'}
+         .join('')
+  end
+
+  def save
+    puts "TODO save"
+  end
+
+  def load
+    puts "TODO load"
+  end
+
+  def help
+    puts "TODO help"
+  end
+  
 end
 
-0.upto(6) { |i| puts draw_hangman(i)}
+game = Game.new("hello")
 
+loop do
+  puts game.draw_hangman
 
+  puts game.display_word
+  
+  input = gets.chomp
 
+  case input
+  when /^\w$/ then game.guess(input)
+  when /^save$/ then game.save
+  when /^load$/ then game.load
+  when /^help$/ then game.help
+  when /^exit$/ then break
 
+  else puts "invalid input"
+  end
+
+end
