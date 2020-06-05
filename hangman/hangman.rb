@@ -2,7 +2,7 @@ class Game
   attr_accessor :word, :misses, :guessed_chars
 
   def initialize(word, misses = 0, guessed_chars = [])
-    @word = word 
+    @word = word.downcase
     @misses = misses 
     @guessed_chars = guessed_chars  
   end
@@ -28,8 +28,8 @@ class Game
 
   def display_word
     @word.split('')
-         .map { |c| @guessed_chars.include?(c) ? c : '-'}
-         .join('')
+         .map { |c| @guessed_chars.include?(c) ? c : '_'}
+         .join(' ')
   end
 
   def save
@@ -50,13 +50,15 @@ game = Game.new("hello")
 
 loop do
   puts game.draw_hangman
+  puts
 
   puts game.display_word
-  
-  input = gets.chomp
+  puts
+
+  input = gets.chomp.downcase
 
   case input
-  when /^\w$/ then game.guess(input)
+  when /^[a-zA-Z]$/ then game.guess(input)
   when /^save$/ then game.save
   when /^load$/ then game.load
   when /^help$/ then game.help
