@@ -1,5 +1,7 @@
 require 'json'
 
+DICTIONARY = File.readlines("dictionary.txt")
+
 class Game
   attr_accessor :word, :misses, :guessed_chars
 
@@ -50,19 +52,55 @@ class Game
   end
 
   def help
-    puts "TODO help"
+    puts %{
+      Enter a single character to make a guess,
+      at 6 misses you loose.
+
+      Type 'save' to save current game.
+      Type 'load' to load saved game.
+      Type 'exit' to exit program.
+    }
+  end
+
+  def end?
+    if @misses == 6
+      puts "You loose! The word was '#{@word}'" 
+      return true
+    elsif @word == @word.split('').map { |c| @guessed_chars.include?(c) ? c : ''}.join('')
+      puts "You win!"
+      return true
+    else 
+      return false
+    end
   end
   
 end
 
-game = Game.new("hello")
+
+def pick_word
+  word = ""
+  while word.length < 5 || word.length > 12
+    word = DICTIONARY.sample.strip
+  end
+  word
+end
+
+game = Game.new(pick_word)
 
 loop do
+
   puts game.draw_hangman
   puts
 
   puts game.display_word
   puts
+
+  if game.end?
+    game = Game.new(pick_word)
+    puts "Press enter to continue"
+    gets
+    next
+  end
 
   input = gets.chomp.downcase
 
@@ -85,7 +123,8 @@ loop do
     game.help
   when /^exit$/
     break
-  else puts "invalid input"
+  else 
+    puts "Invalid input. Type 'help' for instructions"
   end
 
 end

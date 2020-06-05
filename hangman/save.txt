@@ -1,0 +1,1 @@
+{"word":"covenant","misses":0,"guessed_chars":["e","a","o","n","v","t"]}
