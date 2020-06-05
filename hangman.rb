@@ -1,4 +1,4 @@
-require 'json'
+require 'JSON'
 
 class Game
   attr_accessor :word, :misses, :guessed_chars
@@ -35,18 +35,11 @@ class Game
   end
 
   def save
-    JSON.dump({
-      :word => @word, 
-      :misses => @misses,  
-      :guessed_chars => @guessed_chars
-    })
+    puts "TODO save"
   end
 
-  def load(string)
-    data = JSON.load string
-    @word = data['word']
-    @misses = data['misses']
-    @guessed_chars = data['guessed_chars']
+  def load
+    puts "TODO load"
   end
 
   def help
@@ -67,24 +60,12 @@ loop do
   input = gets.chomp.downcase
 
   case input
-  when /^[a-zA-Z]$/
-    game.guess(input)
-  when /^save$/
-    save = File.open("save.txt",'w')
-    save.puts game.save
-    save.close
+  when /^[a-zA-Z]$/ then game.guess(input)
+  when /^save$/ then game.save
+  when /^load$/ then game.load
+  when /^help$/ then game.help
+  when /^exit$/ then break
 
-    puts "Game saved."
-  when /^load$/
-    save = File.open("save.txt", 'r')
-    save_data = save.read
-    game.load(save_data)
-
-    puts "Game loaded."
-  when /^help$/
-    game.help
-  when /^exit$/
-    break
   else puts "invalid input"
   end
 
